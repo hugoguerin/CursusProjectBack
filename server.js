@@ -1,6 +1,7 @@
 require('dotenv').config();
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
+const url = process.env.DB_URL;
 
 const express = require('express');
 const cors = require('cors');
@@ -14,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose
-.connect("mongodb+srv://" + user + ":" + password + "@restapi.egpdw51.mongodb.net/?retryWrites=true&w=majority")
+.connect("mongodb+srv://" + user + ":" + password + url)
 .then(() => {
     console.log("Connected to MongoDB");
     app.listen(3000, () => {
@@ -98,7 +99,7 @@ app.get('/spells/:id', async(req,res) => {
 app.post('/spells', async(req,res) => {
     try {
         const spells = await Spell.create(req.body);
-        res.status(200).json(spells)   
+        res.status(200).json({message : "Spell has been successfully added"})   
     } catch (error) {
         console.log(error.message);
         res.status(500).json({message : error.message})
